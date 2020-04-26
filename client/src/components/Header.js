@@ -5,11 +5,14 @@ import styled from "styled-components";
 
 // ICONS
 import SvgIcon from "./Icon/SvgIcon";
+import { ReactComponent as FeedbackIcon } from "assets/icons/mail.svg";
 import envelope from "assets/icons/envelope.svg";
 import menu from "assets/icons/menu.svg";
 import logo from "assets/logo.svg";
 import Logo from "./Logo";
-import { theme, mq } from "../constants/theme";
+
+import TextAvatar from "components/TextAvatar";
+import { theme, mq } from "constants/theme";
 
 const { colors, typography } = theme;
 const { large } = typography.size;
@@ -48,6 +51,12 @@ const DesktopMenu = styled.div`
 const NavLinks = styled.div`
   align-self: flex-end;
   padding-top: 2rem;
+  button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
   ul {
     list-style-type: none;
     display: flex;
@@ -70,6 +79,7 @@ const NavLinks = styled.div`
     li {
       font-size: ${large};
       color: ${colors.darkerGray};
+      padding: 0 1rem;
       a:not(.registerLink) {
         color: ${colors.darkerGray};
         text-decoration: none;
@@ -91,7 +101,7 @@ const activeStyles = {
   color: `${colors.royalBlue}`,
 };
 
-export default ({ onMenuClick, isAuthenticated }) => {
+export default ({ isAuthenticated, onFeedbackIconClick, onMenuClick }) => {
   return (
     <div className="header">
       <StyledNavBar
@@ -139,21 +149,20 @@ export default ({ onMenuClick, isAuthenticated }) => {
                       <li>
                         <NavLink activeStyle={activeStyles} to="/auth/login">
                           Login
-                        </NavLink>
+                      </NavLink>
                       </li>
                       <li className="registerBtn">
                         <NavLink className="registerLink" to="/auth/signup">
-                          Register
+                            Register
                         </NavLink>
                       </li>
-                      <Link to="/feed">
-                        <SvgIcon
-                          src={envelope}
-                          style={{ marginLeft: "1.5rem" }}
-                        />
-                      </Link>
                     </>
                   )}
+                  <li>
+                    <button onClick={onFeedbackIconClick}>
+                      <FeedbackIcon />
+                    </button>
+                  </li>
                 </ul>
               </NavLinks>
             </DesktopMenu>
