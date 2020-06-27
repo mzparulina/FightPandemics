@@ -107,6 +107,7 @@ const HeaderWrapper = styled.div`
   width: 100vw;
 `;
 
+
 export default ({ authLoading, onMenuClick, onFeedbackIconClick, isAuthenticated }) => {
   const renderNavLinkItems = () => {
     if (authLoading) return null;

@@ -217,7 +217,7 @@ const TEXT_FEEDBACK = [
 ];
 
 const NavigationLayout = (props) => {
-  const { mobiletabs, tabIndex, isAuthenticated, user } = props;
+  const { authLoading, mobiletabs, tabIndex, isAuthenticated, user } = props;
   const history = useHistory();
   const [drawerOpened, setDrawerOpened] = useState(false);
 
@@ -470,7 +470,14 @@ const NavigationLayout = (props) => {
         <a href={NOTION_URL}>Notion</a>
       </NavItemBrief>
       <NavItem history={history}>
-        <Link to="/feed">Feed</Link>
+        <Link
+          to={{
+            pathname: "/feed",
+            user,
+          }}
+        >
+          Feed
+        </Link>
       </NavItem>
       <NavItem history={history}>
         <Link to="/about-us">About Us</Link>
@@ -505,7 +512,7 @@ const NavigationLayout = (props) => {
     <MenuContainer>
       {drawerOpened && <CloseNav onClick={toggleDrawer} />}
       <NavList>
-        {isAuthenticated ? <AuthenticatedMenu /> : <UnAuthenticatedMenu />}
+        {!authLoading && isAuthenticated ? <AuthenticatedMenu /> : <UnAuthenticatedMenu />}
       </NavList>
     </MenuContainer>
   );
@@ -527,6 +534,7 @@ const NavigationLayout = (props) => {
           className="app-drawer"
         >
           <Header
+            authLoading={authLoading}
             onMenuClick={toggleDrawer}
             isAuthenticated={isAuthenticated}
             onFeedbackIconClick={() =>

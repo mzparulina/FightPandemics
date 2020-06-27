@@ -1,18 +1,18 @@
 export default {
   location: { label: "location", className: "filter-1", options: [] },
-  fromWhom: {
+  providers: {
     label: "providers",
     className: "filter-2",
     options: [
-      "Individuals",
+      "Individual",
       "Startup",
       "Company",
       "Community",
       "Government",
       "R&D",
-      "Non-Profit",
+      "Non-profit",
       "University",
-      "Health Care Providers",
+      "Health care provider",
       "Other",
     ],
   },

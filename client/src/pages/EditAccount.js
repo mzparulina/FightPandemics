@@ -78,9 +78,10 @@ function EditAccount() {
   const { error, loading, user } = userProfileState;
   const {
     firstName = "",
+    hide = {},
     lastName = "",
-    objectives = {},
     needs = {},
+    objectives = {},
   } = user || {};
 
   const handleLocationChange = (location) => {
@@ -99,7 +100,10 @@ function EditAccount() {
     }
     userProfileDispatch(updateUser());
     try {
-      const res = await axios.patch("/api/users/current", {...formData, location});
+      const res = await axios.patch("/api/users/current", {
+        ...formData,
+        location,
+      });
       userProfileDispatch(updateUserSuccess(res.data));
     } catch (err) {
       const message = err.response?.data?.message || err.message;
@@ -189,16 +193,29 @@ function EditAccount() {
                 onLocationChange={handleLocationChange}
               />
             </InputWrapper>
+            <CheckBoxWrapper>
+              <Controller
+                as={Checkbox}
+                defaultValue={hide.address}
+                name="hide.address"
+                control={control}
+                onChange={([event]) => event.target.checked}
+                valueName="checked"
+              >
+                <Label inputColor="#000000">Don't show my address</Label>
+              </Controller>
+            </CheckBoxWrapper>
             <Label>I want to</Label>
             <HelpWrapper>
               {Object.entries(OBJECTIVES).map(([key, label]) => (
                 <CheckBoxWrapper key={key}>
                   <Controller
                     as={Checkbox}
-                    defaultChecked={objectives[key]}
+                    defaultValue={objectives[key]}
                     name={`objectives.${key}`}
                     control={control}
                     onChange={([event]) => event.target.checked}
+                    valueName="checked"
                   >
                     <Label inputColor="#000000">{label}</Label>
                   </Controller>
@@ -211,10 +228,11 @@ function EditAccount() {
                 <CheckBoxWrapper key={key}>
                   <Controller
                     as={Checkbox}
-                    defaultChecked={needs[key]}
+                    defaultValue={needs[key]}
                     name={`needs.${key}`}
                     control={control}
                     onChange={([event]) => event.target.checked}
+                    valueName="checked"
                   >
                     <Label inputColor="black">{label}</Label>
                     <UnderLineDescription>{description}</UnderLineDescription>

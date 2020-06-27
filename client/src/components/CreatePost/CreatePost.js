@@ -9,7 +9,7 @@ import {
   CreateProfileButton,
   CreateOrgLink,
 } from "components/CreatePost/StyledPostAs";
-import Form from "./Form/Form";
+import TabForms from "./Form/TabForms";
 import SvgIcon from "components/Icon/SvgIcon";
 import person from "assets/icons/person.svg";
 import organization from "assets/icons/organization.svg";
@@ -20,11 +20,6 @@ import { theme } from "constants/theme";
 const { typography } = theme;
 
 const CreatePostContext = createContext();
-
-const organizations = [
-  { id: 1, title: "Notion" },
-  { id: 2, title: "Notion" },
-];
 
 const Step1 = () => {
   const createPostContext = useContext(CreatePostContext);
@@ -54,15 +49,16 @@ const Step1 = () => {
   );
 };
 
-const Step2 = () => {
+const Step2 = ({ user }) => {
   const createPostContext = useContext(CreatePostContext);
   const { setForm, currentStep, setCurrentStep } = createPostContext;
+
   return (
     currentStep === 2 && (
       <>
         <TitleStep>Posting as an Organisation</TitleStep>
         <BackButton src={back} onClick={() => setCurrentStep(1)} />
-        {organizations.map((item) => {
+        {user.organizations?.map((item) => {
           return (
             <OptionButton
               key={item.id}
@@ -71,11 +67,13 @@ const Step2 = () => {
                 setCurrentStep(3);
               }}
             >
-              {item.title}
+              {item.name}
             </OptionButton>
           );
         })}
-        <CreateOrgLink to={"/create-organization-profile"}>Create new one</CreateOrgLink>
+        <CreateOrgLink to={"/create-organization-profile"}>
+          Create new one
+        </CreateOrgLink>
       </>
     )
   );
@@ -85,7 +83,7 @@ const Step3 = ({ onCancel }) => {
   const { currentStep, setCurrentStep } = useContext(CreatePostContext);
   if (currentStep !== 3) return null;
   return (
-    <Form
+    <TabForms
       setCurrentStep={setCurrentStep}
       onClose={() => {
         setCurrentStep(1);
@@ -149,7 +147,7 @@ const CreatePost = (props) => {
     >
       <Wrapper {...props}>
         <Step1 />
-        <Step2 />
+        <Step2 user={props.user} />
         <Step4 />
       </Wrapper>
       <Step3 {...props} />
