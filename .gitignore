@@ -6,3 +6,5 @@
 .terraform
 backend.tf
 .history
+cypresse2e/cypress/screenshots/
+cypresse2e/cypress/videos

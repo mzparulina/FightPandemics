@@ -6,7 +6,6 @@ import styled from "styled-components";
 // ICONS
 import SvgIcon from "./Icon/SvgIcon";
 import { ReactComponent as FeedbackIcon } from "assets/icons/mail.svg";
-import envelope from "assets/icons/envelope.svg";
 import menu from "assets/icons/menu.svg";
 import logo from "assets/logo.svg";
 import Logo from "./Logo";
@@ -27,7 +26,7 @@ const StyledNavBar = styled(NavBar)`
   margin-top: 0;
   @media screen and (max-width: ${mq.phone.wide.maxWidth}) {
     height: auto;
-    margin-top: 0.8rem;
+    margin-top: 0;
   }
   .am-navbar-title {
     display: none;
@@ -101,9 +100,66 @@ const activeStyles = {
   color: `${colors.royalBlue}`,
 };
 
-export default ({ isAuthenticated, onFeedbackIconClick, onMenuClick }) => {
+const HeaderWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  width: 100vw;
+`;
+
+export default ({ authLoading, onMenuClick, onFeedbackIconClick, isAuthenticated }) => {
+  const renderNavLinkItems = () => {
+    if (authLoading) return null;
+    return (
+      <>
+        <li>
+          <NavLink activeStyle={activeStyles} to="/about-us">
+            About Us
+          </NavLink>
+        </li>
+        <li>
+          <NavLink activeStyle={activeStyles} to="/feed">
+            Feed
+          </NavLink>
+        </li>
+        {isAuthenticated ? (
+          <>
+            <li>
+              <NavLink activeStyle={activeStyles} to="/profile">
+                Profile
+              </NavLink>
+            </li>
+            <li>
+              <NavLink activeStyle={activeStyles} to="/auth/logout">
+                Logout
+              </NavLink>
+            </li>
+          </>
+        ) : (
+            <>
+              <li>
+                <NavLink activeStyle={activeStyles} to="/auth/login">
+                  Login
+              </NavLink>
+              </li>
+              <li className="registerBtn">
+                <NavLink className="registerLink" to="/auth/signup">
+                  Register
+              </NavLink>
+              </li>
+              <li>
+                <button onClick={onFeedbackIconClick}>
+                  <FeedbackIcon />
+                </button>
+              </li>
+            </>
+          )}
+      </>
+    );
+  };
+
   return (
-    <div className="header">
+    <HeaderWrapper className="header">
       <StyledNavBar
         mode="light"
         leftContent={
@@ -120,55 +176,12 @@ export default ({ isAuthenticated, onFeedbackIconClick, onMenuClick }) => {
             />
             <DesktopMenu>
               <NavLinks>
-                <ul>
-                  <li>
-                    <NavLink activeStyle={activeStyles} to="/about-us">
-                      About Us
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink activeStyle={activeStyles} to="/feed">
-                      Feed
-                    </NavLink>
-                  </li>
-                  {isAuthenticated ? (
-                    <>
-                      <li>
-                        <NavLink activeStyle={activeStyles} to="/profile">
-                          Profile
-                        </NavLink>
-                      </li>
-                      <li>
-                        <NavLink activeStyle={activeStyles} to="/auth/logout">
-                          Logout
-                        </NavLink>
-                      </li>
-                    </>
-                  ) : (
-                    <>
-                      <li>
-                        <NavLink activeStyle={activeStyles} to="/auth/login">
-                          Login
-                      </NavLink>
-                      </li>
-                      <li className="registerBtn">
-                        <NavLink className="registerLink" to="/auth/signup">
-                            Register
-                        </NavLink>
-                      </li>
-                    </>
-                  )}
-                  <li>
-                    <button onClick={onFeedbackIconClick}>
-                      <FeedbackIcon />
-                    </button>
-                  </li>
-                </ul>
+                <ul>{renderNavLinkItems()}</ul>
               </NavLinks>
             </DesktopMenu>
           </div>
         }
       />
-    </div>
+    </HeaderWrapper>
   );
 };
