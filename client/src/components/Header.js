@@ -5,14 +5,16 @@ import styled from "styled-components";
 
 // ICONS
 import SvgIcon from "./Icon/SvgIcon";
+
+import MenuIcon from "assets/icons/menu.svg";
+import envelope from "assets/icons/envelope.svg";
+import TextAvatar from "components/TextAvatar";
 import { ReactComponent as FeedbackIcon } from "assets/icons/mail.svg";
-import menu from "assets/icons/menu.svg";
 import logo from "assets/logo.svg";
 import Logo from "./Logo";
-
-import TextAvatar from "components/TextAvatar";
-import { theme, mq } from "constants/theme";
-
+import menu from "assets/icons/menu.svg";
+import { theme, mq } from "../constants/theme";
+import { Menu, Dropdown } from "antd";
 const { colors, typography } = theme;
 const { large } = typography.size;
 const BrandLink = styled(Link)`
@@ -108,7 +110,32 @@ const HeaderWrapper = styled.div`
 `;
 
 
-export default ({ authLoading, onMenuClick, onFeedbackIconClick, isAuthenticated }) => {
+export default ({ authLoading, onMenuClick, onFeedbackIconClick, isAuthenticated, user }) => {
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <Link to="/profile">My Profile</Link>
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item>
+        <Link to="/create-organization-profile">Add Organisation</Link>
+      </Menu.Item>
+      <Menu.Divider />
+      {user?.organizations?.length > 0
+        ? user?.organizations?.map((organization) => (
+            <Menu.Item>
+              <Link to={`/organization/${organization._id}`}>
+                {organization.name}
+              </Link>
+            </Menu.Item>
+          ))
+        : null}
+      {user?.organizations?.length > 0 && <Menu.Divider />}
+      <Menu.Item>
+        <Link to="/auth/logout">Log Out</Link>
+      </Menu.Item>
+    </Menu>
+  );
   const renderNavLinkItems = () => {
     if (authLoading) return null;
     return (
@@ -126,14 +153,14 @@ export default ({ authLoading, onMenuClick, onFeedbackIconClick, isAuthenticated
         {isAuthenticated ? (
           <>
             <li>
-              <NavLink activeStyle={activeStyles} to="/profile">
-                Profile
-              </NavLink>
-            </li>
-            <li>
-              <NavLink activeStyle={activeStyles} to="/auth/logout">
-                Logout
-              </NavLink>
+              <Dropdown overlay={menu} trigger={["click"]}>
+                <a
+                  className="ant-dropdown-link"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  Profile
+                </a>
+              </Dropdown>
             </li>
           </>
         ) : (
@@ -171,7 +198,7 @@ export default ({ authLoading, onMenuClick, onFeedbackIconClick, isAuthenticated
         rightContent={
           <div>
             <MenuToggle
-              src={menu}
+              src={MenuIcon}
               style={{ fontSize: 24, cursor: "pointer" }}
               onClick={onMenuClick}
             />
