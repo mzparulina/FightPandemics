@@ -65,6 +65,7 @@ const Post = ({
     loadMoreComments,
     page,
   } = post;
+  
   const [copied, setCopied] = useState(false);
   const [comment, setComment] = useState([]);
 
