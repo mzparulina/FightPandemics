@@ -15,7 +15,9 @@ import { LOGIN } from "templates/RouteWithSubRoutes";
 import PostCard from "./PostCard";
 import PostSocial from "./PostSocial";
 import SubMenuButton from "components/Button/SubMenuButton";
-import WizardFormNav, { StyledButtonWizard } from "components/StepWizard/WizardFormNav";
+import WizardFormNav, {
+  StyledButtonWizard,
+} from "components/StepWizard/WizardFormNav";
 import TextAvatar from "components/TextAvatar";
 import { typeToTag } from "assets/data/formToPostMappings";
 import {
@@ -146,7 +148,8 @@ const Post = ({
     if (postId) {
       loadComments();
     }
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleOnChange = async (e) => {
     e.preventDefault();
@@ -351,7 +354,10 @@ const Post = ({
               <div className="card-submenu">
                 {isAuthenticated &&
                   user &&
-                  (user._id === post.author.id || user.id === post.author.id || (user.organizations && isAuthorOrg(user.organizations, post.author))) && (
+                  (user._id === post.author.id || 
+                  user.id === post.author.id || 
+                  (user.organizations && isAuthorOrg(user.organizations, post.author)))
+                   && (
                     <SubMenuButton
                       onSelect={onSelect}
                       onChange={onChange}
@@ -386,7 +392,6 @@ const Post = ({
             >
               <p>Are you sure you want to delete the post?</p>
             </WebModal>
-            
           </PostCard>
           {showComments && (
             <StyledButtonWizard nav={<WizardFormNav />}></StyledButtonWizard>
