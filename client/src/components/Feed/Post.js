@@ -32,7 +32,7 @@ import {
 import SvgIcon from "../Icon/SvgIcon";
 import statusIndicator from "assets/icons/status-indicator.svg";
 
-const isAuthorOrg = (arganizations, author) => {
+export const isAuthorOrg = (arganizations, author) => {
   let isValid = false
   arganizations.map(org => {
     if(org.name === author.name) {
@@ -360,7 +360,7 @@ const Post = ({
               <div className="card-submenu">
                 {isAuthenticated &&
                   user &&
-                  (user._id === post.author.id || user.id === post.author.id) && (
+                  (user._id === post.author.id || user.id === post.author.id || isAuthorOrg(user.organizations, post.author)) && (
                     <SubMenuButton
                       onSelect={onSelect}
                       onChange={onChange}
